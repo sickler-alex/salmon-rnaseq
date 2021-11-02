@@ -3,14 +3,18 @@ class: CommandLineTool
 label: RNA velocity analysis via scVelo
 hints:
   DockerRequirement:
-    dockerPull: hubmap/scrna-analysis:latest
+    dockerPull: "hubmap/scrna-analysis:latest"
+  InitialWorkDirRequirement:
+    listing: [$(inputs.spliced_h5ad_file)]
+  EnvVarRequirement:
+    envDef:
+      TMPDIR: "/tmp"
 baseCommand: /opt/scvelo_analysis.py
 
 inputs:
   spliced_h5ad_file:
     type: File
-    inputBinding:
-      position: 1
+    inputBinding: { position: 2, valueFrom: $(self.basename) }
 outputs:
   annotated_h5ad_file:
     type: File
